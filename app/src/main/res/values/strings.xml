@@ -2,4 +2,6 @@
     <string name="app_name">Culture Tracker</string>
     <string name="title_home">Home</string>
     <string name="title_AddBook">Add book</string>
+    <string name="item_default_name">book_name</string>
+    <string name="item_default_author">Book author</string>
 </resources>
