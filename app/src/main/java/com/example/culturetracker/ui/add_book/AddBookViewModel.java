@@ -10,7 +10,7 @@ public class AddBookViewModel extends ViewModel {
 
     public AddBookViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is Add Book fragment");
+        mText.setValue("Enter the 13 number ISBN code of the book");
     }
 
     public LiveData<String> getText() {

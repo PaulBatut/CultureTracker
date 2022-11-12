@@ -2,6 +2,8 @@ package com.example.culturetracker;
 
 import android.os.Bundle;
 
+import com.example.culturetracker.ui.add_book.AddBookFragment;
+import com.example.culturetracker.ui.home.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +20,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-
+    private HomeFragment homeFragment = new HomeFragment();
+    private AddBookFragment addBookFragment = new AddBookFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,15 +32,30 @@ public class MainActivity extends AppCompatActivity {
         //list of books to read
         List<ToReadBooks> toReadBooksList = new ArrayList<>();
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_add_book)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit(); //define the first displayed fragment
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+
+        /*
+        In ths method, we will listen to the user touch on the bottom navigation view and define a behavior based on the user selection. On each button, the app will display the corresponding fragment.
+         */
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.navigation_home:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
+                    return true;
+
+                case R.id.navigation_add_book:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container,addBookFragment).commit();
+                    return true;
+
+
+            }
+
+            return false;
+        });
+
     }
 
 }

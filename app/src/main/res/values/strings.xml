@@ -4,4 +4,5 @@
     <string name="title_AddBook">Add book</string>
     <string name="item_default_name">book_name</string>
     <string name="item_default_author">Book author</string>
+    <string name="title_section">to read</string>
 </resources>
