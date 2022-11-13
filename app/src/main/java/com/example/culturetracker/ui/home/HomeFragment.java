@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
+        bookList = new ArrayList<>();
         SaveList saveList = new SaveList();
         JSONObject book = null;
 
