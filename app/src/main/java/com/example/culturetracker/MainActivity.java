@@ -17,6 +17,8 @@ import com.example.culturetracker.databinding.ActivityMainBinding;
 import java.util.ArrayList;
 import java.util.List;
 
+//Coded by Paul Batut and Amaury Le Conte
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
