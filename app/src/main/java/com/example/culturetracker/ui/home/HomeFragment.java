@@ -31,7 +31,7 @@ public class HomeFragment extends Fragment {
     RecyclerView.LayoutManager RecyclerViewLayoutManager;
     // Linear Layout Manager
     LinearLayoutManager VerticalLayout;
-    private List<Book> bookList = new ArrayList<>();
+    private List<Book> bookList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +43,7 @@ public class HomeFragment extends Fragment {
 
         SaveList saveList = new SaveList();
         JSONObject book = null;
+
         try {
             book = saveList.getJson(getActivity(),"booklist.json");
         } catch (IOException e) {

@@ -15,14 +15,13 @@ import java.io.IOException;
 public class SaveList
 {
     public void saveBookList(Activity activity, String filename, JSONObject jsonObject) throws IOException {
-       /* String jsonString = jsonObject.toString(); //Convert the JSONObject to string before saving it to file. Allow the app to retrieve it easily afterwards without changing the structure of the object.
+        String jsonString = jsonObject.toString(); //Convert the JSONObject to string before saving it to file. Allow the app to retrieve it easily afterwards without changing the structure of the object.
 
         File file = new File(activity.getFilesDir(),filename);
         FileWriter fileWriter = new FileWriter(file);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         bufferedWriter.write(jsonString);
-        bufferedWriter.close();*/
-        System.out.println(jsonObject);
+        bufferedWriter.close();
     }
 
     public JSONObject getJson(Activity activity, String objectName) throws IOException, JSONException {

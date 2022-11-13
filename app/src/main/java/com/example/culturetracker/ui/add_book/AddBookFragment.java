@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddBookFragment extends Fragment {
-    private List<Book> bookList = new ArrayList<>();
+    private List<Book> bookList ;
     private FragmentAddBookBinding binding;
 
     public void getHistory(){
@@ -68,13 +69,13 @@ public class AddBookFragment extends Fragment {
         System.out.println(bookList);
         JSONObject saveBook = new JSONObject();
         JSONArray saveBookArray = new JSONArray();
-        /*for(Book book:bookList){
+        for(Book book:bookList){
             JSONObject tempBook = new JSONObject();
             tempBook.put("name", book.getName());
             tempBook.put("author", book.getAuthor());
             saveBookArray.put(tempBook);
-        }*/
-        saveBook.put("Book", saveBook);
+        }
+        saveBook.put("Book", saveBookArray);
         SaveList saveList = new SaveList();
         saveList.saveBookList(getActivity(), "booklist.json", saveBook);
     }
@@ -86,23 +87,31 @@ public class AddBookFragment extends Fragment {
 
         binding = FragmentAddBookBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        bookList = new ArrayList<>();
         getHistory();
         binding.addBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Thread thread = new Thread(new Runnable() {
+                String isbn = binding.editTextNumber.getText().toString();
+                if(isbn!= null || isbn!=""){
+                    Thread thread = new Thread(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        try  {
-                            retrieveBookInfo();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        @Override
+                        public void run() {
+
+                            try  {
+                                retrieveBookInfo(isbn);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                });
+                    });
 
-                thread.start();
+                    thread.start();
+                }
+                else{
+                    Toast.makeText(getContext(), "The ISBN is null", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -118,10 +127,10 @@ public class AddBookFragment extends Fragment {
         binding = null;
     }
 
-    public void retrieveBookInfo(){
+    public void retrieveBookInfo(String isbn){
         HttpURLConnection connection = null;
         BufferedReader reader = null;
-        String params = "https://www.googleapis.com/books/v1/volumes?q=isbn:9791033906865";
+        String params = "https://www.googleapis.com/books/v1/volumes?q=isbn:"+isbn;
         try {
             URL url = new URL(params);
             connection = (HttpURLConnection) url.openConnection();
@@ -141,13 +150,19 @@ public class AddBookFragment extends Fragment {
 
             }
             JSONObject bookISBNgeneral = new JSONObject(buffer.toString());
+
             JSONArray bookInfoArray = bookISBNgeneral.getJSONArray("items");
-            JSONObject bookISBNinfo = (JSONObject) bookInfoArray.get(0);
-            JSONObject volumeInfo = (JSONObject) bookISBNinfo.get("volumeInfo");
-            System.out.println( bookISBNinfo.get("kind"));
-            Book newbook = new Book(volumeInfo.getString("title"), volumeInfo.getString("authors"));
-            bookList.add(newbook);
-            saveHistory();
+            if(bookInfoArray != null ){
+                JSONObject bookISBNinfo = (JSONObject) bookInfoArray.get(0);
+                JSONObject volumeInfo = (JSONObject) bookISBNinfo.get("volumeInfo");
+                System.out.println( bookISBNinfo.get("kind"));
+                Book newbook = new Book(volumeInfo.getString("title"), volumeInfo.getString("authors"));
+                bookList.add(newbook);
+                saveHistory();
+            }
+            else{
+                Toast.makeText(getContext(), "Invalid ISBN", Toast.LENGTH_SHORT).show();
+            }
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         } finally {
